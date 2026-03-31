@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import "./weather.css";
 
 export default function Weather() {
@@ -12,17 +13,13 @@ export default function Weather() {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=cc11151f62ed43437685fce8bdcd1f4f&units=metric`
       );
-      if (!response.ok) {
-        throw new Error("City not found");
-      }
-      const data = await response.json();
-      setWeatherData(data);
+      setWeatherData(response.data);
       setError(null);
     } catch (err) {
-      setError(err.message);
+      setError("City not found");
       setWeatherData(null);
     }
   };
